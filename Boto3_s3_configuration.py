@@ -2,6 +2,7 @@ import boto3
 import uuid
 
 s3_resource = boto3.resource('s3')
+s3_client = boto3.client('s3')
 
 
 def create_bucket_name(bucket_prefix):
@@ -12,8 +13,6 @@ def create_bucket_name(bucket_prefix):
 def create_bucket(bucket_prefix, s3_connection):
     bucket_name = create_bucket_name(bucket_prefix)
     print(bucket_name)
-    bucket_response = s3_connection.create_bucket(
-        Bucket=bucket_name)
     return bucket_name
 
 
@@ -27,7 +26,7 @@ def create_bucket(bucket_prefix, s3_connection):
 def upload_files(file_name, bucket_name, object=None, args=None):
     if object is None:
         object = file_name
-    response = s3_resource.upload_file(file_name, bucket_name, object, ExtraArgs=args)
+    response = s3_client.upload_file(file_name, bucket_name, object, ExtraArgs=args)
     print(response)
 
 
@@ -43,7 +42,7 @@ def download_files():
     files = list(bucket.objects.all())
     print("Start downloding")
     for file in files:
-        s3_resource.download_file('firstpythonbucket3ddbd7da-1521-460f-b9ae-17061054463d', file.key, file.key)
+        s3_client.download_file('firstpythonbucket3ddbd7da-1521-460f-b9ae-17061054463d', file.key, file.key)
         names_of_file.append(file.key)
     print(names_of_file)
     return 'pictures\\OIP.jfif' in names_of_file
@@ -58,7 +57,7 @@ def download_files():
 
 def check_file_uploaded():
     FilesInBucket = []
-    ListOfItems = s3_resource.list_objects_v2(Bucket='firstpythonbucket3ddbd7da-1521-460f-b9ae-17061054463d')
+    ListOfItems = s3_client.list_objects_v2(Bucket='firstpythonbucket3ddbd7da-1521-460f-b9ae-17061054463d')
     for obj in ListOfItems['Contents']:
         FilesInBucket.append(obj['Key'])
     print(FilesInBucket)
