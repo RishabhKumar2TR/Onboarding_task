@@ -65,5 +65,20 @@ def check_file_uploaded():
 
 
 '''-----------------To download and check file downloaded in bucket----------------------'''
+
+
 # is_uploaded = check_file_uploaded()
 # print(is_uploaded)
+
+
+def verify_bucket_exist(Bucket_prefix):
+    buckets = s3_client.list_buckets()['Buckets']
+    for bucket in buckets:
+        bucket_name = bucket['Name']
+        if Bucket_prefix in bucket_name:
+            print(bucket_name)
+            return True
+
+
+res = verify_bucket_exist('firstpythonbucket')
+print(res)

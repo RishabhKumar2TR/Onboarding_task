@@ -10,8 +10,8 @@ ${Bucket_name_prefix}  firstpythonbucket
 
 *** Test Cases ***
 TestBucketname
-    ${bucket_name}=   Get name of S3 bucket created   ${Bucket_name_prefix}   s3_resource
-    log   ${bucket_name}
+    ${bucket_status}=   Verify Bucket Exist   ${Bucket_name_prefix}
+    Should be true   ${bucket_status}
 
 TestDownloadFiles
     ${is_downloaded}   Download Files
@@ -31,7 +31,6 @@ Get name of S3 bucket created
    [Arguments]   ${bucket_prefix}   ${connection}
    ${bucket_name}=   Create Bucket   ${bucket_prefix}   ${connection}
    RETURN   ${bucket_name}
-
 
 
 
