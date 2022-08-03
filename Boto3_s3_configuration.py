@@ -1,10 +1,8 @@
-import glob
-
 import boto3
 import uuid
 
-s3_client = boto3.client('s3')
 s3_resource = boto3.resource('s3')
+s3_client = boto3.client('s3')
 
 
 def create_bucket_name(bucket_prefix):
@@ -13,14 +11,7 @@ def create_bucket_name(bucket_prefix):
 
 
 def create_bucket(bucket_prefix, s3_connection):
-    # session = boto3.session.Session()
-    # current_region = session.region_name
-    # print(current_region)
     bucket_name = create_bucket_name(bucket_prefix)
-    print(bucket_name)
-    bucket_response = s3_connection.create_bucket(
-        Bucket=bucket_name)
-    # CreateBucketConfiguration={'LocationConstraint': current_region}
     print(bucket_name)
     return bucket_name
 
@@ -35,17 +26,13 @@ def create_bucket(bucket_prefix, s3_connection):
 def upload_files(file_name, bucket_name, object=None, args=None):
     if object is None:
         object = file_name
-
     response = s3_client.upload_file(file_name, bucket_name, object, ExtraArgs=args)
     print(response)
 
 
-# files = glob.glob('pictures/*')
-
 '''-----------------To upload files in bucket----------------------'''
 
 
-# for file in files:
 # upload_files('Hello.txt', 'firstpythonbucket3ddbd7da-1521-460f-b9ae-17061054463d')
 
 
@@ -78,5 +65,20 @@ def check_file_uploaded():
 
 
 '''-----------------To download and check file downloaded in bucket----------------------'''
+
+
 # is_uploaded = check_file_uploaded()
 # print(is_uploaded)
+
+
+def verify_bucket_exist(Bucket_prefix):
+    buckets = s3_client.list_buckets()['Buckets']
+    for bucket in buckets:
+        bucket_name = bucket['Name']
+        if Bucket_prefix in bucket_name:
+            print(bucket_name)
+            return True
+
+
+res = verify_bucket_exist('firstpythonbucket')
+print(res)
